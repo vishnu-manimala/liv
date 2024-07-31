@@ -8,27 +8,19 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from 'src/schemas/user.schema';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
-
+import { ExtractJwt } from 'passport-jwt';
 @Module({
   imports:[
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    UsersModule,
     MongooseModule.forFeature([{name:'User', schema:UserSchema}]),
-    JwtModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        return {
-          secret: config.get<string>('JWT_SECRET'),
-          signOptions: {
-            expiresIn: config.get<string | number>('JWT_EXPIRES'),
-          },
-        };
-      },
+    JwtModule.register({
+      global: true,
+      secret: 'liveStream',
+      signOptions: { expiresIn: '6d' } 
     }),
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    UsersModule
   ],
   providers: [AuthService],
   controllers: [AuthController],
-  exports : [PassportModule]
+  exports : [ AuthService]
 })
 export class AuthModule {}
