@@ -19,12 +19,13 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('signin')
     async signIn(@Body() SignInDto, @Req() req: any, @Res({ passthrough: true }) res: Response){
+        
         const result = await  this.authService.signIn(SignInDto)
+
         if(result){
             const { access_token, data } = result;
             console.log(access_token, data);
-            res.cookie('Authentication', access_token, { httpOnly: true });
-            res.send({ message: 'Logged in successfully', data:data });
+            res.send({ message: 'Logged in successfully', data:data,token: access_token });
         }
        
     }

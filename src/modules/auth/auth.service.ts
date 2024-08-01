@@ -39,8 +39,9 @@ export class AuthService {
     async signIn(signInDto: SignInDto): Promise<any> {
     
       const { email, password } = signInDto;
-
+  console.log(email, password)
       const user = await this.UserModel.findOne({email});
+      console.log("user>>", user)
 
       if(!user){
         throw new UnauthorizedException('Invalid email or password')

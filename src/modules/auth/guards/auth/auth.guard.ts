@@ -45,7 +45,7 @@ console.log("??", process.env.JWT_SECRET)
   }
 
   extractTokenFromHeader(authorization: string): string | undefined {
-   
+   console.log(authorization)
       const [bearer, token] = authorization.split(' ');
 
       return bearer === 'Bearer' ? token : undefined;
